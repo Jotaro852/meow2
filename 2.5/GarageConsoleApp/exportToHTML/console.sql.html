@@ -1,0 +1,157 @@
+<html>
+<head>
+<title>console.sql</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #6c95eb;}
+.s1 { color: #d0d0d0;}
+.s2 { color: #bdbdbd;}
+.s3 { color: #ed94c0;}
+.s4 { color: #85c46c; font-style: italic;}
+.s5 { color: #c9a26d;}
+</style>
+</head>
+<body bgcolor="#262626">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+console.sql</font>
+</center></td></tr></table>
+<pre><span class="s0">CREATE TABLE IF NOT EXISTS </span><span class="s1">itinerary</span>
+<span class="s2">(</span>
+    <span class="s1">id   </span><span class="s0">SERIAL PRIMARY KEY</span><span class="s2">,</span>
+    <span class="s0">name VARCHAR</span><span class="s2">(</span><span class="s3">50</span><span class="s2">) </span><span class="s0">NOT NULL</span>
+<span class="s2">);</span>
+
+<span class="s0">CREATE TABLE IF NOT EXISTS </span><span class="s1">type_car</span>
+<span class="s2">(</span>
+    <span class="s1">id   </span><span class="s0">SERIAL PRIMARY KEY</span><span class="s2">,</span>
+    <span class="s0">name VARCHAR</span><span class="s2">(</span><span class="s3">30</span><span class="s2">) </span><span class="s0">NOT NULL</span>
+<span class="s2">);</span>
+
+<span class="s0">CREATE TABLE IF NOT EXISTS </span><span class="s1">car</span>
+<span class="s2">(</span>
+    <span class="s1">id                </span><span class="s0">SERIAL PRIMARY KEY</span><span class="s2">,</span>
+    <span class="s1">id_type_car       </span><span class="s0">INT REFERENCES </span><span class="s1">type_car </span><span class="s2">(</span><span class="s1">id</span><span class="s2">) </span><span class="s0">NOT NULL</span><span class="s2">,</span>
+    <span class="s0">name              VARCHAR</span><span class="s2">(</span><span class="s3">100</span><span class="s2">)                 </span><span class="s0">NOT NULL</span><span class="s2">,</span>
+    <span class="s1">state_number      </span><span class="s0">VARCHAR</span><span class="s2">(</span><span class="s3">10</span><span class="s2">) </span><span class="s0">UNIQUE           NOT NULL</span><span class="s2">,</span>
+    <span class="s1">number_passengers </span><span class="s0">INT                          NOT NULL</span>
+<span class="s2">);</span>
+
+<span class="s0">CREATE TABLE IF NOT EXISTS </span><span class="s1">driver</span>
+<span class="s2">(</span>
+    <span class="s1">id         </span><span class="s0">SERIAL PRIMARY KEY</span><span class="s2">,</span>
+    <span class="s1">first_name </span><span class="s0">VARCHAR</span><span class="s2">(</span><span class="s3">50</span><span class="s2">) </span><span class="s0">NOT NULL</span><span class="s2">,</span>
+    <span class="s1">last_name  </span><span class="s0">VARCHAR</span><span class="s2">(</span><span class="s3">50</span><span class="s2">) </span><span class="s0">NOT NULL</span><span class="s2">,</span>
+    <span class="s1">birthdate  </span><span class="s0">DATE        NOT NULL</span>
+<span class="s2">);</span>
+
+<span class="s0">CREATE TABLE IF NOT EXISTS </span><span class="s1">route</span>
+<span class="s2">(</span>
+    <span class="s1">id                </span><span class="s0">SERIAL PRIMARY KEY</span><span class="s2">,</span>
+    <span class="s1">id_driver         </span><span class="s0">INT REFERENCES </span><span class="s1">driver </span><span class="s2">(</span><span class="s1">id</span><span class="s2">)    </span><span class="s0">NOT NULL</span><span class="s2">,</span>
+    <span class="s1">id_car            </span><span class="s0">INT REFERENCES </span><span class="s1">car </span><span class="s2">(</span><span class="s1">id</span><span class="s2">)       </span><span class="s0">NOT NULL</span><span class="s2">,</span>
+    <span class="s1">id_itinerary      </span><span class="s0">INT REFERENCES </span><span class="s1">itinerary </span><span class="s2">(</span><span class="s1">id</span><span class="s2">) </span><span class="s0">NOT NULL</span><span class="s2">,</span>
+    <span class="s1">number_passengers </span><span class="s0">INT                           NOT NULL</span>
+<span class="s2">);</span>
+
+
+<span class="s0">CREATE TABLE IF NOT EXISTS </span><span class="s1">rights_category</span>
+<span class="s2">(</span>
+    <span class="s1">id   </span><span class="s0">SERIAL PRIMARY KEY</span><span class="s2">,</span>
+    <span class="s0">name VARCHAR</span><span class="s2">(</span><span class="s3">5</span><span class="s2">) </span><span class="s0">NOT NULL</span>
+<span class="s2">);</span>
+
+<span class="s0">CREATE TABLE IF NOT EXISTS </span><span class="s1">driver_rights_category</span>
+<span class="s2">(</span>
+    <span class="s1">id_driver          </span><span class="s0">INT REFERENCES </span><span class="s1">driver </span><span class="s2">(</span><span class="s1">id</span><span class="s2">)          </span><span class="s0">NOT NULL</span><span class="s2">,</span>
+    <span class="s1">id_rights_category </span><span class="s0">INT REFERENCES </span><span class="s1">rights_category </span><span class="s2">(</span><span class="s1">id</span><span class="s2">) </span><span class="s0">NOT NULL</span><span class="s2">,</span>
+    <span class="s0">PRIMARY KEY </span><span class="s2">(</span><span class="s1">id_driver</span><span class="s2">, </span><span class="s1">id_rights_category</span><span class="s2">)</span>
+<span class="s2">);</span>
+
+<span class="s4">-- Добавление типов автомобилей</span>
+<span class="s0">INSERT INTO </span><span class="s1">type_car</span><span class="s2">(</span><span class="s0">name</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s5">'Автобус'</span><span class="s2">);</span>
+<span class="s0">INSERT INTO </span><span class="s1">type_car</span><span class="s2">(</span><span class="s0">name</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s5">'Микроавтобус'</span><span class="s2">);</span>
+<span class="s0">INSERT INTO </span><span class="s1">type_car</span><span class="s2">(</span><span class="s0">name</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s5">'Легковой автомобиль'</span><span class="s2">);</span>
+
+
+<span class="s4">-- Добавление автомобилей</span>
+<span class="s0">INSERT INTO </span><span class="s1">car</span><span class="s2">(</span><span class="s1">id_type_car</span><span class="s2">, </span><span class="s0">name</span><span class="s2">, </span><span class="s1">state_number</span><span class="s2">, </span><span class="s1">number_passengers</span><span class="s2">)</span>
+<span class="s0">VALUES </span><span class="s2">(</span><span class="s3">1</span><span class="s2">, </span><span class="s5">'ПАЗ-32053'</span><span class="s2">, </span><span class="s5">'К800МР70'</span><span class="s2">, </span><span class="s3">25</span><span class="s2">);</span>
+<span class="s0">INSERT INTO </span><span class="s1">car</span><span class="s2">(</span><span class="s1">id_type_car</span><span class="s2">, </span><span class="s0">name</span><span class="s2">, </span><span class="s1">state_number</span><span class="s2">, </span><span class="s1">number_passengers</span><span class="s2">)</span>
+<span class="s0">VALUES </span><span class="s2">(</span><span class="s3">2</span><span class="s2">, </span><span class="s5">'Hyundai Grand Starex 1'</span><span class="s2">, </span><span class="s5">'С197КХ70'</span><span class="s2">, </span><span class="s3">9</span><span class="s2">);</span>
+<span class="s0">INSERT INTO </span><span class="s1">car</span><span class="s2">(</span><span class="s1">id_type_car</span><span class="s2">, </span><span class="s0">name</span><span class="s2">, </span><span class="s1">state_number</span><span class="s2">, </span><span class="s1">number_passengers</span><span class="s2">)</span>
+<span class="s0">VALUES </span><span class="s2">(</span><span class="s3">3</span><span class="s2">, </span><span class="s5">'Audi A8'</span><span class="s2">, </span><span class="s5">'С395ММ70'</span><span class="s2">, </span><span class="s3">3</span><span class="s2">);</span>
+<span class="s0">INSERT INTO </span><span class="s1">car</span><span class="s2">(</span><span class="s1">id_type_car</span><span class="s2">, </span><span class="s0">name</span><span class="s2">, </span><span class="s1">state_number</span><span class="s2">, </span><span class="s1">number_passengers</span><span class="s2">)</span>
+<span class="s0">VALUES </span><span class="s2">(</span><span class="s3">3</span><span class="s2">, </span><span class="s5">'LADA Vesta'</span><span class="s2">, </span><span class="s5">'К581ХВ70'</span><span class="s2">, </span><span class="s3">3</span><span class="s2">);</span>
+
+
+<span class="s4">-- Добавление маршрутов</span>
+<span class="s0">INSERT INTO </span><span class="s1">itinerary</span><span class="s2">(</span><span class="s0">name</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s5">'Томск-Новосибирск'</span><span class="s2">);</span>
+<span class="s0">INSERT INTO </span><span class="s1">itinerary</span><span class="s2">(</span><span class="s0">name</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s5">'Новосибирск-Томск'</span><span class="s2">);</span>
+<span class="s0">INSERT INTO </span><span class="s1">itinerary</span><span class="s2">(</span><span class="s0">name</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s5">'Томск-Кемерово'</span><span class="s2">);</span>
+<span class="s0">INSERT INTO </span><span class="s1">itinerary</span><span class="s2">(</span><span class="s0">name</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s5">'Томск-Колпашево'</span><span class="s2">);</span>
+<span class="s0">INSERT INTO </span><span class="s1">itinerary</span><span class="s2">(</span><span class="s0">name</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s5">'Молчаново-Томск'</span><span class="s2">);</span>
+
+
+<span class="s4">-- Добавление водителей</span>
+<span class="s0">INSERT INTO </span><span class="s1">driver</span><span class="s2">(</span><span class="s1">first_name</span><span class="s2">, </span><span class="s1">last_name</span><span class="s2">, </span><span class="s1">birthdate</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s5">'Дмитрий'</span><span class="s2">, </span><span class="s5">'Антипов'</span><span class="s2">, </span><span class="s5">'1958-01-08'</span><span class="s2">);</span>
+<span class="s0">INSERT INTO </span><span class="s1">driver</span><span class="s2">(</span><span class="s1">first_name</span><span class="s2">, </span><span class="s1">last_name</span><span class="s2">, </span><span class="s1">birthdate</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s5">'Виктор'</span><span class="s2">, </span><span class="s5">'Гаан'</span><span class="s2">, </span><span class="s5">'2000-04-05'</span><span class="s2">);</span>
+<span class="s0">INSERT INTO </span><span class="s1">driver</span><span class="s2">(</span><span class="s1">first_name</span><span class="s2">, </span><span class="s1">last_name</span><span class="s2">, </span><span class="s1">birthdate</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s5">'Даниил'</span><span class="s2">, </span><span class="s5">'Авдеев'</span><span class="s2">, </span><span class="s5">'2001-11-28'</span><span class="s2">);</span>
+
+
+<span class="s4">-- Добавление категорий прав</span>
+<span class="s0">INSERT INTO </span><span class="s1">rights_category</span><span class="s2">(</span><span class="s0">name</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s5">'A'</span><span class="s2">);</span>
+<span class="s0">INSERT INTO </span><span class="s1">rights_category</span><span class="s2">(</span><span class="s0">name</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s5">'B'</span><span class="s2">);</span>
+<span class="s0">INSERT INTO </span><span class="s1">rights_category</span><span class="s2">(</span><span class="s0">name</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s5">'D'</span><span class="s2">);</span>
+
+
+<span class="s4">-- Добавление категорий прав водителям</span>
+<span class="s0">INSERT INTO </span><span class="s1">driver_rights_category</span><span class="s2">(</span><span class="s1">id_driver</span><span class="s2">, </span><span class="s1">id_rights_category</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s3">1</span><span class="s2">, </span><span class="s3">1</span><span class="s2">);</span>
+<span class="s0">INSERT INTO </span><span class="s1">driver_rights_category</span><span class="s2">(</span><span class="s1">id_driver</span><span class="s2">, </span><span class="s1">id_rights_category</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s3">1</span><span class="s2">, </span><span class="s3">2</span><span class="s2">);</span>
+<span class="s0">INSERT INTO </span><span class="s1">driver_rights_category</span><span class="s2">(</span><span class="s1">id_driver</span><span class="s2">, </span><span class="s1">id_rights_category</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s3">2</span><span class="s2">, </span><span class="s3">2</span><span class="s2">);</span>
+<span class="s0">INSERT INTO </span><span class="s1">driver_rights_category</span><span class="s2">(</span><span class="s1">id_driver</span><span class="s2">, </span><span class="s1">id_rights_category</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s3">2</span><span class="s2">, </span><span class="s3">3</span><span class="s2">);</span>
+<span class="s0">INSERT INTO </span><span class="s1">driver_rights_category</span><span class="s2">(</span><span class="s1">id_driver</span><span class="s2">, </span><span class="s1">id_rights_category</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s3">3</span><span class="s2">, </span><span class="s3">2</span><span class="s2">);</span>
+
+
+<span class="s4">-- Добавление рейсов</span>
+<span class="s0">INSERT INTO </span><span class="s1">route</span><span class="s2">(</span><span class="s1">id_driver</span><span class="s2">, </span><span class="s1">id_car</span><span class="s2">, </span><span class="s1">id_itinerary</span><span class="s2">, </span><span class="s1">number_passengers</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s3">1</span><span class="s2">, </span><span class="s3">3</span><span class="s2">, </span><span class="s3">1</span><span class="s2">, </span><span class="s3">1</span><span class="s2">);</span>
+<span class="s0">INSERT INTO </span><span class="s1">route</span><span class="s2">(</span><span class="s1">id_driver</span><span class="s2">, </span><span class="s1">id_car</span><span class="s2">, </span><span class="s1">id_itinerary</span><span class="s2">, </span><span class="s1">number_passengers</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s3">2</span><span class="s2">, </span><span class="s3">4</span><span class="s2">, </span><span class="s3">3</span><span class="s2">, </span><span class="s3">2</span><span class="s2">);</span>
+<span class="s0">INSERT INTO </span><span class="s1">route</span><span class="s2">(</span><span class="s1">id_driver</span><span class="s2">, </span><span class="s1">id_car</span><span class="s2">, </span><span class="s1">id_itinerary</span><span class="s2">, </span><span class="s1">number_passengers</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s3">3</span><span class="s2">, </span><span class="s3">3</span><span class="s2">, </span><span class="s3">2</span><span class="s2">, </span><span class="s3">3</span><span class="s2">);</span>
+<span class="s0">INSERT INTO </span><span class="s1">route</span><span class="s2">(</span><span class="s1">id_driver</span><span class="s2">, </span><span class="s1">id_car</span><span class="s2">, </span><span class="s1">id_itinerary</span><span class="s2">, </span><span class="s1">number_passengers</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s3">2</span><span class="s2">, </span><span class="s3">2</span><span class="s2">, </span><span class="s3">5</span><span class="s2">, </span><span class="s3">7</span><span class="s2">);</span>
+
+
+<span class="s4">-- Вывод данных из таблиц</span>
+<span class="s0">select </span><span class="s1">* </span><span class="s0">from </span><span class="s1">route</span><span class="s2">;</span>
+<span class="s0">select </span><span class="s1">* </span><span class="s0">from </span><span class="s1">driver_rights_category</span><span class="s2">;</span>
+<span class="s0">select </span><span class="s1">* </span><span class="s0">from </span><span class="s1">rights_category</span><span class="s2">;</span>
+<span class="s0">select </span><span class="s1">* </span><span class="s0">from </span><span class="s1">driver</span><span class="s2">;</span>
+<span class="s0">select </span><span class="s1">* </span><span class="s0">from </span><span class="s1">itinerary</span><span class="s2">;</span>
+<span class="s0">select </span><span class="s1">* </span><span class="s0">from </span><span class="s1">car</span><span class="s2">;</span>
+<span class="s0">select </span><span class="s1">* </span><span class="s0">from </span><span class="s1">type_car</span><span class="s2">;</span>
+
+<span class="s4">-- Вывод всех данных из таблицы RightsCategory</span>
+<span class="s0">SELECT </span><span class="s1">* </span><span class="s0">FROM </span><span class="s1">rights_category</span><span class="s2">;</span>
+<span class="s4">-- Вывод всех данных из таблицы Driver</span>
+<span class="s0">SELECT </span><span class="s1">* </span><span class="s0">FROM </span><span class="s1">driver</span><span class="s2">;</span>
+
+<span class="s4">-- Добавление данных в таблицу Driver</span>
+<span class="s0">INSERT INTO </span><span class="s1">driver</span><span class="s2">(</span><span class="s1">first_name</span><span class="s2">, </span><span class="s1">last_name</span><span class="s2">, </span><span class="s1">birthdate</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s5">'Иван'</span><span class="s2">, </span><span class="s5">'Салманов'</span><span class="s2">, </span><span class="s5">'2000-02-01'</span><span class="s2">);</span>
+
+<span class="s4">-- Добавление данных в таблицу DriveRightsCategory(Добавление категории прав водителю)</span>
+<span class="s0">INSERT INTO </span><span class="s1">driver_rights_category</span><span class="s2">(</span><span class="s1">id_driver</span><span class="s2">, </span><span class="s1">id_rights_category</span><span class="s2">) </span><span class="s0">VALUES </span><span class="s2">(</span><span class="s3">4</span><span class="s2">, </span><span class="s3">2</span><span class="s2">);</span>
+
+<span class="s4">-- Вывод прав всех водителей</span>
+<span class="s0">SELECT </span><span class="s1">dr</span><span class="s2">.</span><span class="s1">first_name</span><span class="s2">, </span><span class="s1">dr</span><span class="s2">.</span><span class="s1">last_name</span><span class="s2">, </span><span class="s1">rc</span><span class="s2">.</span><span class="s1">name</span>
+<span class="s0">FROM </span><span class="s1">driver_rights_category</span>
+         <span class="s0">INNER JOIN </span><span class="s1">driver dr </span><span class="s0">on </span><span class="s1">driver_rights_category</span><span class="s2">.</span><span class="s1">id_driver = dr</span><span class="s2">.</span><span class="s1">id</span>
+         <span class="s0">INNER JOIN </span><span class="s1">rights_category rc </span><span class="s0">on </span><span class="s1">rc</span><span class="s2">.</span><span class="s1">id = driver_rights_category</span><span class="s2">.</span><span class="s1">id_rights_category</span><span class="s2">;</span>
+
+<span class="s4">-- Вывод прав конкретного водителя</span>
+<span class="s0">SELECT </span><span class="s1">dr</span><span class="s2">.</span><span class="s1">first_name</span><span class="s2">, </span><span class="s1">dr</span><span class="s2">.</span><span class="s1">last_name</span><span class="s2">, </span><span class="s1">rc</span><span class="s2">.</span><span class="s1">name</span>
+<span class="s0">FROM </span><span class="s1">driver_rights_category</span>
+         <span class="s0">INNER JOIN </span><span class="s1">driver dr </span><span class="s0">on </span><span class="s1">driver_rights_category</span><span class="s2">.</span><span class="s1">id_driver = dr</span><span class="s2">.</span><span class="s1">id</span>
+         <span class="s0">INNER JOIN </span><span class="s1">rights_category rc </span><span class="s0">on </span><span class="s1">rc</span><span class="s2">.</span><span class="s1">id = driver_rights_category</span><span class="s2">.</span><span class="s1">id_rights_category</span>
+<span class="s0">WHERE </span><span class="s1">dr</span><span class="s2">.</span><span class="s1">id = </span><span class="s3">1</span><span class="s2">; </span></pre>
+</body>
+</html>
